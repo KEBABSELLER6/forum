@@ -14,31 +14,9 @@ class TopicController extends Controller
      */
     public function index()
     {
-        $generalTopics=Topic::where('type','general')->get();
-        $uniqueTopics=Topic::where('type','unique')->get();
-
-        foreach($generalTopics as $topic){
-            $result = Topic::find($topic->id)->posts()->latest('created_at')->first();
-            if($result!=null){
-                $topic['recent_post_at']=$result->created_at;
-            } else {
-                $topic['recent_post_at']='No post yet';
-            }
-        }
-
-        foreach($uniqueTopics as $topic){
-            $result = Topic::find($topic->id)->posts()->latest('created_at')->first();
-            if($result!=null){
-                $topic['recent_post_at']=$result->created_at;
-
-            } else {
-                $topic['recent_post_at']='No post yet';
-            }
-        }
-
         return view('topics.index', [
-            'genTopics'=>$generalTopics,
-            'uniqTopics'=>$uniqueTopics
+            'genTopics'=>Topic::getTopics('general'),
+            'uniqTopics'=>Topic::getTopics('unique')
             ]);
     }
 
@@ -60,14 +38,13 @@ class TopicController extends Controller
      */
     public function store(Request $request)
     {
-        $cTopic = new Topic();
-
-        $cTopic->title=$request->title;
-        $cTopic->created_by=$request->creator;
-        $cTopic->descr=$request->descr;
-        $cTopic->show_id=uniqid();
-
-        $cTopic->save();
+        $validatedRequest = $this->validateTopic($request);
+        Topic::create([
+            'title' => $validatedRequest['title'],
+            'created_by' => $validatedRequest['created_by'],
+            'descr' => $validatedRequest['descr'],
+            'show_id' => uniqid()
+        ]);
 
         return redirect('/topics');
     }
@@ -80,7 +57,7 @@ class TopicController extends Controller
      */
     public function show($topic)
     {
-        return Topic::getTopicFromShowID($topic);
+        return Topic::getTopic($topic);
     }
 
     /**
@@ -92,7 +69,7 @@ class TopicController extends Controller
     public function edit($topic)
     {
         return view('topics.edit',[
-            'topic' => Topic::getTopicFromShowID($topic)
+            'topic' => Topic::getTopic($topic)
         ]);
     }
 
@@ -105,13 +82,8 @@ class TopicController extends Controller
      */
     public function update(Request $request, $topic)
     {
-        $cTopic=Topic::getTopicFromShowID($topic);
-        $cTopic->title=$request->title;
-        $cTopic->created_by=$request->creator;
-        $cTopic->descr=$request->descr;
-
-        $cTopic->save();
-
+        $cTopic=Topic::getTopic($topic);
+        $cTopic->update($this->validateTopic($request));
         return redirect('/topics/' . $cTopic->show_id . '/posts');
     }
 
@@ -123,9 +95,16 @@ class TopicController extends Controller
      */
     public function destroy($topic)
     {
-        Topic::getTopicFromShowID($topic)->delete();
-
+        Topic::getTopic($topic)->delete();
         return redirect('/topics');
+    }
+
+    protected function validateTopic($request){
+        return $request->validate([
+            'title' => 'required',
+            'created_by' =>'required',
+            'descr' =>'required'
+        ]);
     }
 
 }

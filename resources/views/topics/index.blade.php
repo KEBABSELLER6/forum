@@ -45,7 +45,7 @@
                 @endforeach
                 <li class="item">
                     <div>
-                        <a href="{{ route('topics.create') }}" class="item_links">+ Add new post</a>
+                        <a href="{{ route('topics.create') }}" class="item_links">+ Add new topic</a>
                     </div>
                 </li>
             </ul>
