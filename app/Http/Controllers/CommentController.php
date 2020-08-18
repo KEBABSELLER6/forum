@@ -16,7 +16,7 @@ class CommentController extends Controller
      */
     public function index($topic,$post)
     {
-        $cPost= Post::getPostFromShowId($post);
+        $cPost= Post::getPost($post);
         return view('comments.index',[
             'topic'=>$topic,
             'post' => $cPost,
@@ -33,7 +33,7 @@ class CommentController extends Controller
     {
         return view('comments.create',[
             'topic'=>$topic,
-            'post'=>Post::getPostFromShowId($post)
+            'post'=>Post::getPost($post)
         ]);
     }
 
@@ -45,15 +45,14 @@ class CommentController extends Controller
      */
     public function store(Request $request,$topic,$post)
     {
-        $cPost=Post::getPostFromShowId($post);
-        $comment = new Comment();
-
-        $comment->body=$request->body;
-        $comment->created_by=$request->creator;
-        $comment->post_id=$cPost->id;
-        $comment->show_id=uniqid();
-
-        $comment->save();
+        $cPost=Post::getPost($post);
+        $validetedRequest=$this->validateComment($request);
+        Comment::create([
+            'body'=>$validetedRequest['body'],
+            'created_by'=>$validetedRequest['created_by'],
+            'show_id'=>uniqid(),
+            'post_id'=>$cPost->id
+        ]);
 
         return redirect('/topics/' .$topic . '/posts/' . $post . '/comments');
     }
@@ -66,7 +65,7 @@ class CommentController extends Controller
      */
     public function show($comment)
     {
-        return Comment::getCommentFromShowID($comment);
+        return Comment::getComment($comment);
     }
 
     /**
@@ -79,8 +78,8 @@ class CommentController extends Controller
     {
         return view('comments.edit',[
             'topic'=>$topic,
-            'post'=>Post::getPostFromShowId($post),
-            'comment'=>Comment::getCommentFromShowID($comment)
+            'post'=>Post::getPost($post),
+            'comment'=>Comment::getComment($comment)
         ]);
     }
 
@@ -93,11 +92,8 @@ class CommentController extends Controller
      */
     public function update(Request $request,$topic,$post, $comment)
     {
-        $cComment = Comment::getCommentFromShowID($comment);
-        $cComment->body=$request->body;
-        $cComment->created_by=$request->creator;
-
-        $cComment->save();
+        $cComment = Comment::getComment($comment);
+        $cComment->update($this->validateComment($request));
 
         return redirect('/topics/' .$topic . '/posts/' . $post . '/comments');
     }
@@ -113,6 +109,14 @@ class CommentController extends Controller
         Comment::where('show_id',$comment)->delete();
 
         return redirect('/topics/' .$topic . '/posts/' . $post . '/comments');
+    }
+
+    protected function validateComment($request)
+    {
+        return $request->validate([
+            'body'=>'required',
+            'created_by'=>'required'
+        ]);
     }
 
 }
