@@ -15,8 +15,8 @@ class TopicController extends Controller
     public function index()
     {
         return view('topics.index', [
-            'genTopics'=>Topic::getTopics('general'),
-            'uniqTopics'=>Topic::getTopics('unique')
+            'gTopics'=>Topic::getTopics('general'),
+            'uTopics'=>Topic::getTopics('unique')
             ]);
     }
 
