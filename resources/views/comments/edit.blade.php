@@ -22,9 +22,9 @@
             </div>
             <div class="form_field">
                 <div>
-                    {!! Form::label('creator', 'creator') !!}
+                    {!! Form::label('created_by', 'created_by') !!}
                 </div>
-                {!! Form::text('creator',$comment->created_by, array('class'=>'form_input_text')) !!}
+                {!! Form::text('created_by',$comment->created_by, array('class'=>'form_input_text')) !!}
             </div>
             <div class="form_field">
                 {!! Form::submit('Submit') !!}

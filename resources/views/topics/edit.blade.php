@@ -18,7 +18,7 @@
             </div>
             <div class="form_field">
                 <div>
-                    {!! Form::label('created_by', 'creator') !!}
+                    {!! Form::label('created_by', 'created_by') !!}
                 </div>
                 {!! Form::text('created_by', $topic->created_by, array('class'=>'form_input_text')) !!}
             </div>
