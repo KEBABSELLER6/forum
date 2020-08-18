@@ -10,7 +10,10 @@ class Post extends Model
         return $this->hasMany('App\Comment');
     }
 
-    public static function getPostFromShowId($showID){
+    public static function getPost($showID){
         return Post::where('show_id',$showID)->get()[0];
     }
+
+    protected $fillable = ['title', 'created_by', 'descr','show_id','topic_id'];
+
 }

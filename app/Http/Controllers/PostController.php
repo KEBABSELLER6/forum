@@ -15,7 +15,7 @@ class PostController extends Controller
      */
     public function index($topic)
     {
-        $cTopic=Topic::getTopicFromShowID($topic);
+        $cTopic=Topic::getTopic($topic);
         $cPosts=Topic::find($cTopic->id)->posts()->get();
 
         foreach($cPosts as $post){
@@ -41,7 +41,7 @@ class PostController extends Controller
     public function create($topic)
     {
         return view('posts.create',[
-            'topic' => getTopicFromShowID($topic)
+            'topic' => Topic::getTopic($topic)
         ]);
     }
 
@@ -53,16 +53,15 @@ class PostController extends Controller
      */
     public function store(Request $request, $topic)
     {
-        $cTopic = Topic::getTopicFromShowID($topic);
-        $cPost = new Post();
-
-        $cPost->title=$request->title;
-        $cPost->created_by=$request->creator;
-        $cPost->descr=$request->descr;
-        $cPost->show_id=uniqid();
-        $cPost->topic_id=$cTopic->id;
-
-        $cPost->save();
+        $cTopic = Topic::getTopic($topic);
+        $validatedRequest = $this->validatePost($request);
+        Post::create([
+            'title' => $validatedRequest['title'],
+            'created_by' => $validatedRequest['created_by'],
+            'descr' => $validatedRequest['descr'],
+            'show_id'=>uniqid(),
+            'topic_id'=>$cTopic->id
+        ]);
 
         return redirect('/topics/' .$topic . '/posts');
     }
@@ -75,7 +74,7 @@ class PostController extends Controller
      */
     public function show($post)
     {
-        return Post::getPostFromShowId($post);
+        return Post::getPost($post);
     }
 
     /**
@@ -87,8 +86,8 @@ class PostController extends Controller
     public function edit($topic,$post)
     {
         return view('posts.edit',[
-            'topic' => Topic::getTopicFromShowID($topic),
-            'post' => Post::getPostFromShowId($post)
+            'topic' => Topic::getTopic($topic),
+            'post' => Post::getPost($post)
         ]);
     }
 
@@ -101,13 +100,8 @@ class PostController extends Controller
      */
     public function update(Request $request,$topic,$post)
     {
-        $cPost = Post::getPostFromShowId($post);
-
-        $cPost->title=$request->title;
-        $cPost->created_by=$request->creator;
-        $cPost->descr=$request->descr;
-
-        $cPost->save();
+        $cPost = Post::getPost($post);
+        $cPost->update($this->validatePost($request));
 
         return redirect('/topics/' . $topic . '/posts/' .$cPost->show_id . '/comments');
     }
@@ -123,5 +117,13 @@ class PostController extends Controller
         Post::where('show_id', $post)->get()[0]->delete();
 
         return redirect('/topics/'. $topic . '/posts/');
+    }
+
+    protected function validatePost($request){
+        return $request->validate([
+            'title' => 'required',
+            'created_by' =>'required',
+            'descr' =>'required'
+        ]);
     }
 }
