@@ -15,13 +15,14 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id('id');
-            $table->timestamp('created_at')->default(now());
-            $table->timestamp('updated_at')->nullable();
+            $table->timestamps();
             $table->string('title');
             $table->text('descr');
             $table->foreignId('topic_id');
             $table->string('created_by');
             $table->char('show_id', 13)->unique();
+
+            $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade');
         });
     }
 

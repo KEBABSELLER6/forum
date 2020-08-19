@@ -10,6 +10,10 @@ class Post extends Model
         return $this->hasMany('App\Comment');
     }
 
+    public function topic(){
+        return $this->belongsTo(Topic::class);
+    }
+
     public static function getPost($showID){
         return Post::where('show_id',$showID)->get()[0];
     }

@@ -15,8 +15,7 @@ class CreateTopicsTable extends Migration
     {
         Schema::create('topics', function (Blueprint $table) {
             $table->id('id');
-            $table->timestamp('created_at')->default(now());
-            $table->timestamp('updated_at')->nullable(true);
+            $table->timestamps();
             $table->string('title');
             $table->text('descr');
             $table->string('type')->default('unique');

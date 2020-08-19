@@ -15,12 +15,13 @@ class CreateCommentsTable extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id('id');
-            $table->timestamp('created_at')->default(now());
-            $table->timestamp('updated_at')->nullable();
+            $table->timestamps();
             $table->text('body');
             $table->string('created_by');
             $table->foreignId('post_id');
             $table->char('show_id', 13)->unique();
+
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
         });
     }
 
