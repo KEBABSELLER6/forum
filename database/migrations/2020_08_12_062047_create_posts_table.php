@@ -19,10 +19,11 @@ class CreatePostsTable extends Migration
             $table->string('title');
             $table->text('descr');
             $table->foreignId('topic_id');
-            $table->string('created_by');
+            $table->foreignId('user_id');
             $table->char('show_id', 13)->unique();
 
             $table->foreign('topic_id')->references('id')->on('topics')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

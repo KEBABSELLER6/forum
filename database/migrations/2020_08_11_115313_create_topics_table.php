@@ -19,8 +19,10 @@ class CreateTopicsTable extends Migration
             $table->string('title');
             $table->text('descr');
             $table->string('type')->default('unique');
-            $table->text('created_by');
+            $table->foreignId('user_id');
             $table->char('show_id', 13)->unique();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

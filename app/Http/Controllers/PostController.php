@@ -25,11 +25,12 @@ class PostController extends Controller
             } else {
                 $post['recent_comment_at']='No comment yet';
             }
+            $post['creator']=$post->getUsername();
         }
 
         return view('posts.index',[
             'topic' => $cTopic,
-            'posts' => $cPosts
+            'posts' => $cPosts,
         ]);
     }
 
@@ -57,7 +58,7 @@ class PostController extends Controller
         $validatedRequest = $this->validatePost($request);
         Post::create([
             'title' => $validatedRequest['title'],
-            'created_by' => $validatedRequest['created_by'],
+            'user_id' => 1,
             'descr' => $validatedRequest['descr'],
             'show_id'=>uniqid(),
             'topic_id'=>$cTopic->id
@@ -122,7 +123,6 @@ class PostController extends Controller
     protected function validatePost($request){
         return $request->validate([
             'title' => 'required',
-            'created_by' =>'required',
             'descr' =>'required'
         ]);
     }

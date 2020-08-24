@@ -9,7 +9,7 @@
             </div>
             <div class="item_info">
                 <div class="item_desc">Last post created at : {{$topic->recent_post_at}}</div>
-                <div class="item_desc">Created by : {{ $topic->created_by }}</div>
+                <div class="item_desc">Created by : {{ $topic->creator }}</div>
             </div>
         </li>
     @endforeach

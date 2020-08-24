@@ -8,8 +8,8 @@ use Faker\Generator as Faker;
 $factory->define(Comment::class, function (Faker $faker) {
     return [
         'body'=>$faker->text,
-        'created_by'=>$faker->userName,
-        'post_id'=>factory(\App\Post::class),
+        'user_id'=>App\User::all()->random()->id,
+        'post_id'=>App\Post::all()->random()->id,
         'show_id'=>uniqid()
     ];
 });

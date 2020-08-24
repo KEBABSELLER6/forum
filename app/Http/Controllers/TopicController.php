@@ -41,7 +41,7 @@ class TopicController extends Controller
         $validatedRequest = $this->validateTopic($request);
         Topic::create([
             'title' => $validatedRequest['title'],
-            'created_by' => $validatedRequest['created_by'],
+            'user_id' => 1,
             'descr' => $validatedRequest['descr'],
             'show_id' => uniqid()
         ]);
@@ -102,7 +102,6 @@ class TopicController extends Controller
     protected function validateTopic($request){
         return $request->validate([
             'title' => 'required',
-            'created_by' =>'required',
             'descr' =>'required'
         ]);
     }

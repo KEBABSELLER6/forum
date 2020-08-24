@@ -20,7 +20,7 @@ class CommentController extends Controller
         return view('comments.index',[
             'topic'=>$topic,
             'post' => $cPost,
-            'comments' => Post::find($cPost->id)->comments()->get()
+            'comments' => $cPost->comments()->get()
         ]);
     }
 
@@ -49,7 +49,7 @@ class CommentController extends Controller
         $validetedRequest=$this->validateComment($request);
         Comment::create([
             'body'=>$validetedRequest['body'],
-            'created_by'=>$validetedRequest['created_by'],
+            'user_id'=>1,
             'show_id'=>uniqid(),
             'post_id'=>$cPost->id
         ]);
@@ -115,7 +115,6 @@ class CommentController extends Controller
     {
         return $request->validate([
             'body'=>'required',
-            'created_by'=>'required'
         ]);
     }
 

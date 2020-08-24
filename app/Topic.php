@@ -14,7 +14,7 @@ class Topic extends Model
         return Topic::where('show_id', $showID)->get()[0];
     }
 
-    protected $fillable = ['title', 'created_by', 'descr','show_id'];
+    protected $fillable = ['title', 'user_id', 'descr','show_id'];
 
     public static function getTopics($type){
         $topics= Topic::where('type',$type)->get();
@@ -26,8 +26,17 @@ class Topic extends Model
             } else {
                 $topic['recent_post_at']='No post yet';
             }
+            $topic['creator']=$topic->getUsername();
         }
         
         return $topics;
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function getUsername(){
+        return $this->user()->get()[0]->name;
     }
 }

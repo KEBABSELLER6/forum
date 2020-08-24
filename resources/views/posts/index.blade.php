@@ -31,7 +31,7 @@
                 </div>
                 <div class="item_info">
                     <div class="item_desc">Last activity at : {{ $post->recent_comment_at }}</div>
-                    <div class="item_desc">Created by: {{ $post->created_by }}</div>
+                    <div class="item_desc">Created by: {{ $post->creator }}</div>
                 </div>
             </li>
             @endforeach

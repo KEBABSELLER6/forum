@@ -17,11 +17,12 @@ class CreateCommentsTable extends Migration
             $table->id('id');
             $table->timestamps();
             $table->text('body');
-            $table->string('created_by');
+            $table->foreignId('user_id');
             $table->foreignId('post_id');
             $table->char('show_id', 13)->unique();
 
             $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

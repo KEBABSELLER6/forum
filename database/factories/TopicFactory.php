@@ -10,7 +10,7 @@ $factory->define(Topic::class, function (Faker $faker) {
         'title'=>$faker->text,
         'descr'=>$faker->paragraph,
         'type'=>$faker->randomElement(['general','unique']),
-        'created_by'=>$faker->userName,
+        'user_id'=>App\User::all()->random()->id,
         'show_id'=>uniqid()
     ];
 });
