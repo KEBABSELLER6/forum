@@ -28,4 +28,17 @@ class Post extends Model
         return $this->user()->get()[0]->name;
     }
 
+    public function getLastCommentDate(){
+        $cComment=Post::find($this->id)->comments()->latest('created_at')->first();
+        if($cComment!=null){
+            return $cComment->created_at;
+        }else{
+            return 'No comment yet';
+        }
+    }
+
+    public function getOwnerName(){
+        return $this->user()->get()[0]->name;
+    }
+
 }

@@ -18,25 +18,23 @@ class Topic extends Model
 
     public static function getTopics($type){
         $topics= Topic::where('type',$type)->get();
-
-        foreach($topics as $topic){
-            $result = Topic::find($topic->id)->posts()->latest('created_at')->first();
-            if($result!=null){
-                $topic['recent_post_at']=$result->created_at;
-            } else {
-                $topic['recent_post_at']='No post yet';
-            }
-            $topic['creator']=$topic->getUsername();
-        }
-        
         return $topics;
+    }
+
+    public function getRecentPostDate(){
+        $cPost=Topic::find($this->id)->posts()->latest('created_at')->first();
+        if($cPost!=null){
+            return $cPost->created_at;
+        }else{
+            return 'No post yet';
+        }
     }
 
     public function user(){
         return $this->belongsTo(User::class);
     }
 
-    public function getUsername(){
+    public function getOwnerName(){
         return $this->user()->get()[0]->name;
     }
 }

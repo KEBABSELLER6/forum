@@ -30,8 +30,8 @@
                     <div class="item_desc">{{ $post->descr }}</div>
                 </div>
                 <div class="item_info">
-                    <div class="item_desc">Last activity at : {{ $post->recent_comment_at }}</div>
-                    <div class="item_desc">Created by: {{ $post->creator }}</div>
+                    <div class="item_desc">Last activity at : {{ $post->getLastCommentDate() }}</div>
+                    <div class="item_desc">Created by: {{ $post->getOwnerName() }}</div>
                 </div>
             </li>
             @endforeach

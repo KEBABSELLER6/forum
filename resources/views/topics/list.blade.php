@@ -8,8 +8,8 @@
                 <div class="item_desc">{{ $topic->descr }}</div>
             </div>
             <div class="item_info">
-                <div class="item_desc">Last post created at : {{$topic->recent_post_at}}</div>
-                <div class="item_desc">Created by : {{ $topic->creator }}</div>
+                <div class="item_desc">Last post created at : {{$topic->getRecentPostDate()}}</div>
+                <div class="item_desc">Created by : {{ $topic->getOwnerName() }}</div>
             </div>
         </li>
     @endforeach

@@ -17,7 +17,7 @@ class TopicController extends Controller
         return view('topics.index', [
             'gTopics'=>Topic::getTopics('general'),
             'uTopics'=>Topic::getTopics('unique')
-            ]);
+        ]);
     }
 
     /**
