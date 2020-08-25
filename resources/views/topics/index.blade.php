@@ -18,11 +18,13 @@
             </div>
             <ul class="item_list">
                 @component('topics.list',['topics'=>$uTopics])@endcomponent
+                @can('create', App\Topic::class)
                 <li class="item">
                     <div>
                         <a href="{{ route('topics.create') }}" class="item_links">+ Add new topic</a>
                     </div>
                 </li>
+                @endcan
             </ul>
         </div>
 

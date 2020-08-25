@@ -13,33 +13,33 @@ class AbilitiesSeeder extends Seeder
     {
         DB::table('abilities')->insert(array(
             array(
-                'name' => 'view_content',
-                'descr' => 'view topics, posts, comments'
+                'name' => 'create_topic'
             ),
             array(
-                'name' => 'edit_content',
-                'descr' => 'edit topics, posts, comments'
+                'name' => 'create_post'
             ),
             array(
-                'name' => 'delete_content',
-                'descr' => 'delete topics, posts, comments'
+                'name' => 'create_comment'
             ),
             array(
-                'name' => 'add_content',
-                'descr' => 'add topics, posts, comments'
+                'name' => 'view_profile'
+            ),
+
+
+            array(
+                'name' => 'delete_topic'
             ),
             array(
-                'name' => 'make_moderator',
-                'descr' => 'make a user moderator'
+                'name' => 'delete_post'
             ),
             array(
-                'name' => 'view_profile',
-                'descr' => 'view a users profile'
+                'name' => 'delete_comment'
             ),
+
+
             array(
-                'name' => 'edit_profile',
-                'descr' => 'edit a profile'
-            ),
+                'name' => 'make_moderator'
+            )
         ));
     }
 }

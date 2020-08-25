@@ -16,21 +16,9 @@ class PostController extends Controller
     public function index($topic)
     {
         $cTopic=Topic::getTopic($topic);
-        $cPosts=Topic::find($cTopic->id)->posts()->get();
-
-        foreach($cPosts as $post){
-            $result=Post::find($post->id)->comments()->latest('created_at')->first();
-            if($result!=null){
-                $post['recent_comment_at']=$result->created_at;
-            } else {
-                $post['recent_comment_at']='No comment yet';
-            }
-            $post['creator']=$post->getUsername();
-        }
-
         return view('posts.index',[
             'topic' => $cTopic,
-            'posts' => $cPosts,
+            'posts' => Topic::find($cTopic->id)->posts()->get()
         ]);
     }
 
@@ -41,6 +29,7 @@ class PostController extends Controller
      */
     public function create($topic)
     {
+        $this->authorize('create',Post::class);
         return view('posts.create',[
             'topic' => Topic::getTopic($topic)
         ]);
@@ -54,11 +43,12 @@ class PostController extends Controller
      */
     public function store(Request $request, $topic)
     {
+        $this->authorize('create',Post::class);
         $cTopic = Topic::getTopic($topic);
         $validatedRequest = $this->validatePost($request);
         Post::create([
             'title' => $validatedRequest['title'],
-            'user_id' => 1,
+            'user_id' => auth()->user()->id,
             'descr' => $validatedRequest['descr'],
             'show_id'=>uniqid(),
             'topic_id'=>$cTopic->id
@@ -86,6 +76,7 @@ class PostController extends Controller
      */
     public function edit($topic,$post)
     {
+        $this->authorize('update',Post::class);
         return view('posts.edit',[
             'topic' => Topic::getTopic($topic),
             'post' => Post::getPost($post)
@@ -101,6 +92,7 @@ class PostController extends Controller
      */
     public function update(Request $request,$topic,$post)
     {
+        $this->authorize('update',Post::class);
         $cPost = Post::getPost($post);
         $cPost->update($this->validatePost($request));
 
@@ -115,6 +107,7 @@ class PostController extends Controller
      */
     public function destroy($topic,$post)
     {
+        $this->authorize('delete',Post::class);
         Post::where('show_id', $post)->get()[0]->delete();
 
         return redirect('/topics/'. $topic . '/posts/');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Topic;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TopicController extends Controller
 {
@@ -27,6 +28,7 @@ class TopicController extends Controller
      */
     public function create()
     {
+        $this->authorize('create',Topic::class);
         return view('topics.create');
     }
 
@@ -38,10 +40,11 @@ class TopicController extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create',Topic::class);
         $validatedRequest = $this->validateTopic($request);
         Topic::create([
             'title' => $validatedRequest['title'],
-            'user_id' => 1,
+            'user_id' => auth()->user()->id,
             'descr' => $validatedRequest['descr'],
             'show_id' => uniqid()
         ]);
@@ -68,6 +71,7 @@ class TopicController extends Controller
      */
     public function edit($topic)
     {
+        $this->authorize('update',Topic::class);
         return view('topics.edit',[
             'topic' => Topic::getTopic($topic)
         ]);
@@ -82,6 +86,7 @@ class TopicController extends Controller
      */
     public function update(Request $request, $topic)
     {
+        $this->authorize('update',Topic::class);
         $cTopic=Topic::getTopic($topic);
         $cTopic->update($this->validateTopic($request));
         return redirect('/topics/' . $cTopic->show_id . '/posts');
@@ -95,6 +100,7 @@ class TopicController extends Controller
      */
     public function destroy($topic)
     {
+        $this->authorize('delete',Topic::class);
         Topic::getTopic($topic)->delete();
         return redirect('/topics');
     }

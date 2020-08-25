@@ -16,14 +16,14 @@ class CreateRolesAbilitiesTables extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('descr');
+            $table->string('descr')->nullable();
             $table->timestamps();
         });
 
         Schema::create('abilities', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('descr');
+            $table->string('descr')->nullable();
             $table->timestamps();
         });
 

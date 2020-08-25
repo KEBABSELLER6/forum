@@ -31,6 +31,7 @@ class CommentController extends Controller
      */
     public function create($topic,$post)
     {
+        $this->authorize('create',Comment::class);
         return view('comments.create',[
             'topic'=>$topic,
             'post'=>Post::getPost($post)
@@ -45,11 +46,12 @@ class CommentController extends Controller
      */
     public function store(Request $request,$topic,$post)
     {
+        $this->authorize('create',Comment::class);
         $cPost=Post::getPost($post);
         $validetedRequest=$this->validateComment($request);
         Comment::create([
             'body'=>$validetedRequest['body'],
-            'user_id'=>1,
+            'user_id'=>auth()->user()->id,
             'show_id'=>uniqid(),
             'post_id'=>$cPost->id
         ]);
@@ -76,6 +78,7 @@ class CommentController extends Controller
      */
     public function edit($topic,$post,$comment)
     {
+        $this->authorize('update',Comment::class);
         return view('comments.edit',[
             'topic'=>$topic,
             'post'=>Post::getPost($post),
@@ -92,6 +95,7 @@ class CommentController extends Controller
      */
     public function update(Request $request,$topic,$post, $comment)
     {
+        $this->authorize('update',Comment::class);
         $cComment = Comment::getComment($comment);
         $cComment->update($this->validateComment($request));
 
@@ -106,6 +110,7 @@ class CommentController extends Controller
      */
     public function destroy($comment)
     {
+        $this->authorize('delete',Comment::class);
         Comment::where('show_id',$comment)->delete();
 
         return redirect('/topics/' .$topic . '/posts/' . $post . '/comments');

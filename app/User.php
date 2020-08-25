@@ -38,14 +38,28 @@ class User extends Authenticatable
     ];
 
     public function posts(){
-        return $this->hasMany('App\Post');
+        return $this->hasMany(Post::class);
     }
 
     public function topics(){
-        return $this->hasMany('App\Topic');
+        return $this->hasMany(Topic::class);
     }
 
     public function comments(){
-        return $this->hasMany('App\Comment');
+        return $this->hasMany(Comment::class);
+    }
+
+    public function roles(){
+        return $this->belongsToMany(Role::class)->withTimestamps();
+    }
+
+    public function abilities(){
+        $res=array();
+        foreach($this->roles()->get() as $role){
+            foreach($role->abilities()->get() as $ability){
+                array_push($res,$ability->name);
+            }
+        }
+        return $res;
     }
 }

@@ -17,6 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Auth::loginUsingId(5);
+
 Route::get('/topics', 'TopicController@index')->name('topics.index');
 Route::get('/topics/create', 'TopicController@create')->name('topics.create');
 Route::post('/topics', 'TopicController@store');

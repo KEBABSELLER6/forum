@@ -12,16 +12,20 @@
                 <div class="post_desc">{{ $post->descr }}</div>
             </div>
             <div class="items_options">
+                @can('update', $post)
                 <div>
                     <a href="{{ route('posts.edit', [$topic, $post->show_id]) }}" class="option_links">
                         <img src="/images/edit.png" alt="edit" class="option_icons">
                     </a>
                 </div>
+                @endcan
+                @can('delete', $post)
                 <div>
                     <a href="{{ route('posts.delete', [$topic,$post->show_id]) }}" class="option_links">
                         <img src="/images/trash.png" alt="delete" class="option_icons">
                     </a>
                 </div>
+                @endcan
             </div>
         </div>
         <ul class="item_list">
@@ -35,24 +39,30 @@
                     <div class="comment_body">{{ $comment ->body }}</div>
                 </div>
                 <div class="items_options">
+                    @can('update', $comment)
                     <div>
                         <a href="{{ route('comments.edit', [$topic,$post->show_id,$comment->show_id]) }}" class="option_links">
                             <img src="/images/edit.png" alt="edit" class="option_icons">
                         </a>
                     </div>
+                    @endcan
+                    @can('delete', $comment)
                     <div>
                         <a href="{{ route('comments.delete', [$topic,$post->show_id,$comment->show_id]) }}" class="option_links" data-method="delete">
                             <img src="/images/trash.png" alt="delete" class="option_icons">
                         </a>
                     </div>
+                    @endcan
                 </div>
             </li>
             @endforeach
+            @can('create', App\Comment::class)
             <li class="comment">
                 <div>
                     <a href="{{ route('comments.create',[$topic,$post->show_id]) }}" class="item_links">+ Add new comment</a>
                 </div> 
             </li>
+            @endcan
         </ul>
     </div>
 @endsection
