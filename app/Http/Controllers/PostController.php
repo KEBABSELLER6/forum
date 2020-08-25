@@ -65,7 +65,7 @@ class PostController extends Controller
      */
     public function edit($topic,$post)
     {
-        $this->authorize('update',Post::class);
+        $this->authorize('update',[Post::getPost($post)]);
         return view('posts.edit',[
             'topic' => Topic::getTopic($topic),
             'post' => Post::getPost($post)
@@ -81,11 +81,11 @@ class PostController extends Controller
      */
     public function update(Request $request,$topic,$post)
     {
-        $this->authorize('update',Post::class);
+        $this->authorize('update',[Post::getPost($post)]);
         $cPost = Post::getPost($post);
         $cPost->update($this->validatePost($request));
 
-        return redirect('/topics/' . $topic . '/posts/' .$cPost->show_id . '/comments');
+        return redirect('/topics/' . $topic . '/posts');
     }
 
     /**
@@ -96,7 +96,7 @@ class PostController extends Controller
      */
     public function destroy($topic,$post)
     {
-        $this->authorize('delete',Post::class);
+        $this->authorize('delete',[Post::getPost($post)]);
         Post::where('show_id', $post)->get()[0]->delete();
 
         return redirect('/topics/'. $topic . '/posts/');

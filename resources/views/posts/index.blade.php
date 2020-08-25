@@ -12,37 +12,37 @@
                 </div>
             </div>
         </div>
-        <div class="list-group">
+        <ul class="list-group">
             @foreach ($posts as $post)
-                <a href="{{ route('comments.index', [$topic->show_id,$post->show_id]) }}" class="list-group-item list-group-item-action">
-                    <div class="row align-items-center">
-                        <div class="col-8 justify-content-between">
-                            <h5 class="mb-1">{{ $post->title }}</h5>
-                            <p class="mb-1">{{ $post->descr }}</p>
-                    </div>
-                    <div class="col-3 justify-content-between">
-                        <div>
-                            <small>Last post : {{$post->getLastCommentDate()}}</small>
-                        </div>
-                        <div>
-                            <span class="badge badge-primary badge-pill">{{ $topic->getOwnerName() }}</span>
-                        </div>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="col-8 justify-content-between">
+                    <a href="{{ route('comments.index', [$topic->show_id,$post->show_id]) }}">
+                        <h5 class="mb-1">{{ $post->title }}</h5>
+                    </a>   
+                    <p class="mb-1">{{ $post->descr }}</p>
+            </div>
+            <div class="col-3 justify-content-between">
+                <div>
+                    <small>Last post : {{$post->getLastCommentDate()}}</small>
+                </div>
+                <div>
+                    <span class="badge badge-primary badge-pill">{{ $topic->getOwnerName() }}</span>
+                </div>
                     </div>
                     @canany(['update', 'delete'], $post)
-                    <div class="dropdown col-1">
-                        <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                            @can('update', $post)
-                                <button class="dropdown-item" type="button">Edit post</button>
-                            @endcan
-                            @can('delete', $post)
-                                <button class="dropdown-item" type="button">Delete post</button>
-                            @endcan
-                        </div>
+                <div class="col-1 dropdown justify-content-between">
+                    <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu">
+                    @can('update', $post)
+                        <a class="dropdown-item" href="/topics/{{ $topic->show_id}}/posts/{{ $post->show_id }}/edit">Edit post</a>
+                    @endcan
+                    @can('delete', $post)
+                        <a class="dropdown-item" href="#">Delete post</a>
+                    @endcan
                     </div>
+                </div>
                     @endcanany
-                    </div>
-                </a>
+            </li>                    
             @endforeach
             @can('create', App\Topic::class)
             <a href="{{ route('posts.create', $topic->show_id) }}" class="list-group-item list-group-item-action">
@@ -53,6 +53,6 @@
                 </div>
             </a>
             @endcan
-        </div>
+        </ul>
     </div>
 @endsection

@@ -1,23 +1,23 @@
-@extends('base')
+@extends('layouts.app')
 
 @section('content')
-    <div class="content">
-        <div class="form_title">New post for {{ $topic->title }}</div>
+    <div class="container">
+       <h4>New post for {{ $topic->title }}</h4>
         {!! Form::open(array('url' => '/topics/' . $topic->show_id . '/posts', 'class'=>'form_wrapper')) !!}
-            <div class="form_field">
+            <div class="form-group">
                 <div>
                     {!! Form::label('title', 'Post title:') !!}
                 </div>
-                {!! Form::text('title', '', array('class'=>'form_input_text')) !!}
+                {!! Form::text('title', '',  array('class'=>'form-control')) !!}
             </div>
-            <div class="form_field">
+            <div class="form-group">
                 <div>
                     {!! Form::label('descr', 'Post description:') !!}
                 </div>
-                {!! Form::textarea('descr', '', array('class'=>array('form_input_text',"form_input_body"))) !!}
+                {!! Form::textarea('descr', '',  array('class'=>array('form-control'), 'rows'=>4)) !!}
             </div>
-            <div class="form_field">
-                {!! Form::submit('Submit') !!}
+            <div class="form-group">
+                {!! Form::submit('Submit', array('class'=>array('btn','btn-primary'))) !!}
             </div>
         {!! Form::close() !!}
     </div>

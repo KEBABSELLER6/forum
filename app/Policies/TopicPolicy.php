@@ -28,7 +28,7 @@ class TopicPolicy
      * @param  \App\Topic  $topic
      * @return mixed
      */
-    public function update(User $user, $topic)
+    public function update(User $user, Topic $topic)
     {
         return $user->id===$topic->user_id;
     }

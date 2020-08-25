@@ -60,7 +60,7 @@ class TopicController extends Controller
      */
     public function edit($topic)
     {
-        $this->authorize('update',Topic::class);
+        $this->authorize('update',[Topic::getTopic($topic)]);
         return view('topics.edit',[
             'topic' => Topic::getTopic($topic)
         ]);
@@ -75,10 +75,10 @@ class TopicController extends Controller
      */
     public function update(Request $request, $topic)
     {
-        $this->authorize('update',Topic::class);
+        $this->authorize('update',[Topic::getTopic($topic)]);
         $cTopic=Topic::getTopic($topic);
         $cTopic->update($this->validateTopic($request));
-        return redirect('/topics/' . $cTopic->show_id . '/posts');
+        return redirect('/topics');
     }
 
     /**
@@ -89,7 +89,7 @@ class TopicController extends Controller
      */
     public function destroy($topic)
     {
-        $this->authorize('delete',Topic::class);
+        $this->authorize('delete',[Topic::getTopic($topic)]);
         Topic::getTopic($topic)->delete();
         return redirect('/topics');
     }

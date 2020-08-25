@@ -1,24 +1,24 @@
-@extends('base')
+@extends('layouts.app')
 
 @section('content')
-    <div class="content">
-        <div class="form_title">New post for {{ $topic->title }}</div>
-        {!! Form::open(array('url' => '/topics/' . $topic->show_id . '/posts/' . $post->show_id, 'class'=>'form_wrapper', 'method' => 'put')) !!}
-            <div class="form_field">
-                <div>
-                    {!! Form::label('title', 'Post title:') !!}
+    <div class="container">
+            <h4>Edit post</h4>
+            {!! Form::open(array('url' => '/topics/' . $topic->show_id . '/posts/' . $post->show_id, 'class'=>'form_wrapper', 'method' => 'put')) !!}
+                <div class="form-group">
+                    <div>
+                        {!! Form::label('title', 'Post title:') !!}
+                    </div>
+                    {!! Form::text('title', $post->title, array('class'=>'form-control')) !!}
                 </div>
-                {!! Form::text('title', $post->title, array('class'=>'form_input_text')) !!}
-            </div>
-            <div class="form_field">
-                <div>
-                    {!! Form::label('descr', 'Post description:') !!}
+                <div class="form-group">
+                    <div>
+                        {!! Form::label('descr', 'Post description:') !!}
+                    </div>
+                    {!! Form::textarea('descr', $post->descr, array('class'=>array('form-control'), 'rows'=>4)) !!}
                 </div>
-                {!! Form::textarea('descr', $post->descr, array('class'=>array('form_input_text',"form_input_body"))) !!}
-            </div>
-            <div class="form_field">
-                {!! Form::submit('Submit') !!}
-            </div>
-        {!! Form::close() !!}
+                <div class="form-group">
+                    {!! Form::submit('Submit', array('class'=>array('btn','btn-primary'))) !!}
+                </div>
+            {!! Form::close() !!}
     </div>
 @endsection

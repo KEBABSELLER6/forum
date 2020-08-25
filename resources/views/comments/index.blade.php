@@ -13,32 +13,30 @@
             </div>
         </div>
 
-        <div class="list-group">
+        <ul class="list-group">
             @foreach ($comments as $comment)
-                <a href="#" class="list-group-item list-group-item-action">
-                    <div class="row align-items-center">
-                        <div class="col-11 justify-content-between">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="col-11 justify-content-between">
                             <div>
                                 <span class="badge badge-primary badge-pill">{{ $comment->getOwnerName() }}</span>
                                 <small>Created at : {{$comment->created_at}}</small>
                             </div>
                             <p class="mb-1">{{ $comment->body }}</p>
                     </div>
-                    @canany(['update', 'delete'], $post)
-                    <div class="dropdown col-1">
-                        <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                            @can('update', $comment)
-                                <button class="dropdown-item" type="button">Edit post</button>
-                            @endcan
-                            @can('delete', $comment)
-                                <button class="dropdown-item" type="button">Delete post</button>
-                            @endcan
+                    @canany(['update', 'delete'], $comment)
+                    <div class="col-1 dropdown justify-content-between">
+                        <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu">
+                        @can('update', $comment)
+                            <a class="dropdown-item" href="/topics/{{ $topic}}/posts/{{ $post->show_id }}/comments/{{$comment->show_id}}/edit">Edit post</a>
+                        @endcan
+                        @can('delete', $comment)
+                            <a class="dropdown-item" href="#">Delete post</a>
+                        @endcan
                         </div>
                     </div>
                     @endcanany
-                    </div>
-                </a>
+                </li>
             @endforeach
             @can('create', App\Comment::class)
             <a href="{{  route('comments.create',[$topic,$post->show_id]) }}" class="list-group-item list-group-item-action">
@@ -47,8 +45,8 @@
                         <p class="mb-1">+ Add new comment</p>
                     </div>
                 </div>
-            </a>
+            </a>    
             @endcan
-        </div>
+        </ul>
     </div>
 @endsection

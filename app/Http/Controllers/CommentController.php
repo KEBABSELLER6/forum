@@ -67,7 +67,7 @@ class CommentController extends Controller
      */
     public function edit($topic,$post,$comment)
     {
-        $this->authorize('update',Comment::class);
+        $this->authorize('update',[Comment::getComment($comment)]);
         return view('comments.edit',[
             'topic'=>$topic,
             'post'=>Post::getPost($post),
@@ -84,7 +84,7 @@ class CommentController extends Controller
      */
     public function update(Request $request,$topic,$post, $comment)
     {
-        $this->authorize('update',Comment::class);
+        $this->authorize('update',[Comment::getComment($comment)]);
         $cComment = Comment::getComment($comment);
         $cComment->update($this->validateComment($request));
 
@@ -99,7 +99,7 @@ class CommentController extends Controller
      */
     public function destroy($comment)
     {
-        $this->authorize('delete',Comment::class);
+        $this->authorize('delete',[Comment::getComment($comment)]);
         Comment::where('show_id',$comment)->delete();
 
         return redirect('/topics/' .$topic . '/posts/' . $post . '/comments');

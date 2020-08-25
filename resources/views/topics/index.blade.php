@@ -5,13 +5,13 @@
         <div class='row'>
             <h3>General</h3>
         </div>
-        <div class="list-group">
+        <ul class="list-group">
             @component('topics.list',['topics'=>$gTopics])@endcomponent
-        </div>
+        </ul>
         <div class='row'>
             <h3>Unique</h3>
         </div>
-        <div class="list-group">
+        <ul class="list-group">
             @component('topics.list',['topics'=>$uTopics])@endcomponent
             @can('create', App\Topic::class)
             <a href="{{ route('topics.create') }}" class="list-group-item list-group-item-action">
@@ -22,10 +22,8 @@
                 </div>
             </a>
             @endcan
-        </div>
+        </ul>
     </div>
-       
-
 @endsection
 
         
