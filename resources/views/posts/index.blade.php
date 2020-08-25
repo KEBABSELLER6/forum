@@ -1,51 +1,58 @@
-@extends('base')
+@extends('layouts.app')
 
 @section('content')
-    <div id="content">
-        <div class="items_header">
-            <div>
-                <div class="items_title">{{$topic->title}}</div>
-                <div class="items_desc">{{$topic->descr}}</div>
-            </div>
-            <div class="items_options">
-                @can('update', $topic)
-                <div>
-                    <a href="{{ route('topics.edit', $topic->show_id) }}" class="option_links">
-                        <img src="/images/edit.png" alt="edit" class="option_icons">
-                    </a>
+    <div class="container">
+        <div class="row">
+            <div class="jumbotron">
+                <h1 class="display-6">{{$topic->title}}</h1>
+                <p class="lead">{{$topic->descr}}</p>
+                <div class="justify-content-between">
+                    <span class="badge badge-primary badge-pill">{{ $topic->getOwnerName() }}</span>
+                    <small>Created at : {{$topic->getRecentPostDate()}}</small>
                 </div>
-                @endcan 
-                @can('delete', $topic)
-                <div>
-                    <a href="{{ route('topics.delete', $topic->show_id) }}" class="option_links">
-                        <img src="/images/trash.png" alt="delete" class="option_icons">
-                    </a>
-                </div>
-                @endcan
             </div>
         </div>
-        <ul class="item_list">
+        <div class="list-group">
             @foreach ($posts as $post)
-            <li class="item">
-                <div class="item_header">
-                    <div class="item_title">
-                        <a class="item_links" href="{{ route('comments.index',[$topic->show_id,$post->show_id]) }}">{{ $post->title }}</a>
+                <a href="{{ route('comments.index', [$topic->show_id,$post->show_id]) }}" class="list-group-item list-group-item-action">
+                    <div class="row align-items-center">
+                        <div class="col-8 justify-content-between">
+                            <h5 class="mb-1">{{ $post->title }}</h5>
+                            <p class="mb-1">{{ $post->descr }}</p>
                     </div>
-                    <div class="item_desc">{{ $post->descr }}</div>
-                </div>
-                <div class="item_info">
-                    <div class="item_desc">Last activity at : {{ $post->getLastCommentDate() }}</div>
-                    <div class="item_desc">Created by: {{ $post->getOwnerName() }}</div>
-                </div>
-            </li>
+                    <div class="col-3 justify-content-between">
+                        <div>
+                            <small>Last post : {{$post->getLastCommentDate()}}</small>
+                        </div>
+                        <div>
+                            <span class="badge badge-primary badge-pill">{{ $topic->getOwnerName() }}</span>
+                        </div>
+                    </div>
+                    @canany(['update', 'delete'], $post)
+                    <div class="dropdown col-1">
+                        <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            @can('update', $post)
+                                <button class="dropdown-item" type="button">Edit post</button>
+                            @endcan
+                            @can('delete', $post)
+                                <button class="dropdown-item" type="button">Delete post</button>
+                            @endcan
+                        </div>
+                    </div>
+                    @endcanany
+                    </div>
+                </a>
             @endforeach
             @can('create', App\Topic::class)
-            <li class="item">
-                <div>
-                    <a href="{{ route('posts.create', $topic->show_id) }}" class="item_links">+ Add new post</a>
+            <a href="{{ route('posts.create', $topic->show_id) }}" class="list-group-item list-group-item-action">
+                <div class="row align-items-center">
+                    <div class="col justify-content-between">
+                        <h5 class="mb-1">+ Add new post</h5>
+                    </div>
                 </div>
-            </li>
+            </a>
             @endcan
-        </ul>
+        </div>
     </div>
 @endsection

@@ -1,34 +1,31 @@
-@extends('base')
+@extends('layouts.app')
 
 @section('content')
-    <div class="content">
-        <div id="general_topics">
-            <div class="items_header">
-                <div class="items_title">General</div>
-            </div>
-            <ul class="item_list">
-                @yield('topicList')
-                @component('topics.list',['topics'=>$gTopics])@endcomponent
-            </ul>
+    <div class='container'>
+        <div class='row'>
+            <h3>General</h3>
         </div>
-
-        <div id="unique_topics">
-            <div class="items_header">
-                <div class="items_title">Unique</div>
-            </div>
-            <ul class="item_list">
-                @component('topics.list',['topics'=>$uTopics])@endcomponent
-                @can('create', App\Topic::class)
-                <li class="item">
-                    <div>
-                        <a href="{{ route('topics.create') }}" class="item_links">+ Add new topic</a>
+        <div class="list-group">
+            @component('topics.list',['topics'=>$gTopics])@endcomponent
+        </div>
+        <div class='row'>
+            <h3>Unique</h3>
+        </div>
+        <div class="list-group">
+            @component('topics.list',['topics'=>$uTopics])@endcomponent
+            @can('create', App\Topic::class)
+            <a href="{{ route('topics.create') }}" class="list-group-item list-group-item-action">
+                <div class="row align-items-center">
+                    <div class="col justify-content-between">
+                        <h5 class="mb-1">+ Add new topic</h5>
                     </div>
-                </li>
-                @endcan
-            </ul>
+                </div>
+            </a>
+            @endcan
         </div>
-
     </div>
+       
+
 @endsection
 
         

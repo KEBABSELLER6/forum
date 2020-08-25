@@ -58,18 +58,7 @@ class CommentController extends Controller
 
         return redirect('/topics/' .$topic . '/posts/' . $post . '/comments');
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Comment  $comment
-     * @return \Illuminate\Http\Response
-     */
-    public function show($comment)
-    {
-        return Comment::getComment($comment);
-    }
-
+    
     /**
      * Show the form for editing the specified resource.
      *

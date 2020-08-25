@@ -53,17 +53,6 @@ class TopicController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Topic  $topic
-     * @return \Illuminate\Http\Response
-     */
-    public function show($topic)
-    {
-        return Topic::getTopic($topic);
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Topic  $topic

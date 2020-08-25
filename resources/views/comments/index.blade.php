@@ -1,68 +1,54 @@
-@extends('base')
+@extends('layouts.app')
 
 @section('content')
-    <div class="content">
-        <div class="post_header">
-            <div>
-                <div class="post_info">
-                    <div class="post_author">{{ $post->getOwnerName() }}</div>
-                    <div class="post_date">{{ $post->created_at }}</div>
+    <div class="container">
+        <div class="row">
+            <div class="jumbotron">
+                <h1 class="display-6">{{$post->title}}</h1>
+                <p class="lead">{{$post->descr}}</p>
+                <div class="justify-content-between">
+                    <span class="badge badge-primary badge-pill">{{ $post->getOwnerName() }}</span>
+                    <small>Created at : {{$post->getLastCommentDate()}}</small>
                 </div>
-                <div class="post_title">{{ $post->title }}</div>
-                <div class="post_desc">{{ $post->descr }}</div>
-            </div>
-            <div class="items_options">
-                @can('update', $post)
-                <div>
-                    <a href="{{ route('posts.edit', [$topic, $post->show_id]) }}" class="option_links">
-                        <img src="/images/edit.png" alt="edit" class="option_icons">
-                    </a>
-                </div>
-                @endcan
-                @can('delete', $post)
-                <div>
-                    <a href="{{ route('posts.delete', [$topic,$post->show_id]) }}" class="option_links">
-                        <img src="/images/trash.png" alt="delete" class="option_icons">
-                    </a>
-                </div>
-                @endcan
             </div>
         </div>
-        <ul class="item_list">
+
+        <div class="list-group">
             @foreach ($comments as $comment)
-            <li class="comment">
-                <div>
-                    <div class="comment_header">
-                        <div class="comment_author">{{ $comment ->getOwnerName() }}</div>
-                        <div class=comment_date>{{ $comment ->created_at }}</div>
+                <a href="#" class="list-group-item list-group-item-action">
+                    <div class="row align-items-center">
+                        <div class="col-11 justify-content-between">
+                            <div>
+                                <span class="badge badge-primary badge-pill">{{ $comment->getOwnerName() }}</span>
+                                <small>Created at : {{$comment->created_at}}</small>
+                            </div>
+                            <p class="mb-1">{{ $comment->body }}</p>
                     </div>
-                    <div class="comment_body">{{ $comment ->body }}</div>
-                </div>
-                <div class="items_options">
-                    @can('update', $comment)
-                    <div>
-                        <a href="{{ route('comments.edit', [$topic,$post->show_id,$comment->show_id]) }}" class="option_links">
-                            <img src="/images/edit.png" alt="edit" class="option_icons">
-                        </a>
+                    @canany(['update', 'delete'], $post)
+                    <div class="dropdown col-1">
+                        <button class="btn btn-primary dropdown-toggle btn-sm" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                            @can('update', $comment)
+                                <button class="dropdown-item" type="button">Edit post</button>
+                            @endcan
+                            @can('delete', $comment)
+                                <button class="dropdown-item" type="button">Delete post</button>
+                            @endcan
+                        </div>
                     </div>
-                    @endcan
-                    @can('delete', $comment)
-                    <div>
-                        <a href="{{ route('comments.delete', [$topic,$post->show_id,$comment->show_id]) }}" class="option_links" data-method="delete">
-                            <img src="/images/trash.png" alt="delete" class="option_icons">
-                        </a>
+                    @endcanany
                     </div>
-                    @endcan
-                </div>
-            </li>
+                </a>
             @endforeach
             @can('create', App\Comment::class)
-            <li class="comment">
-                <div>
-                    <a href="{{ route('comments.create',[$topic,$post->show_id]) }}" class="item_links">+ Add new comment</a>
-                </div> 
-            </li>
+            <a href="{{  route('comments.create',[$topic,$post->show_id]) }}" class="list-group-item list-group-item-action">
+                <div class="row align-items-center">
+                    <div class="col justify-content-between">
+                        <p class="mb-1">+ Add new comment</p>
+                    </div>
+                </div>
+            </a>
             @endcan
-        </ul>
+        </div>
     </div>
 @endsection
