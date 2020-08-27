@@ -84,10 +84,9 @@ class CommentController extends Controller
      */
     public function update(Request $request,$topic,$post, $comment)
     {
-        $this->authorize('update',[Comment::getComment($comment)]);
-        $cComment = Comment::getComment($comment);
+        $cComment=Comment::getComment($comment);
+        $this->authorize('update',[$cComment]);
         $cComment->update($this->validateComment($request));
-
         return redirect('/topics/' .$topic . '/posts/' . $post . '/comments');
     }
 
@@ -97,12 +96,22 @@ class CommentController extends Controller
      * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function destroy($comment)
+    public function destroy($topic,$post,$comment)
     {
-        $this->authorize('delete',[Comment::getComment($comment)]);
-        Comment::where('show_id',$comment)->delete();
-
+        $cComment=Comment::getComment($comment);
+        $this->authorize('delete',[$cComment]);
+        $cComment->delete();
         return redirect('/topics/' .$topic . '/posts/' . $post . '/comments');
+    }
+
+    public function remove($topic,$post,$comment){
+        $cComment=Comment::getComment($comment);
+        $this->authorize('delete',[$cComment]);
+        return view('comments.remove',[
+            'topic'=>$topic,
+            'post'=>$post,
+            'comment'=>$cComment
+        ]);
     }
 
     protected function validateComment($request)

@@ -23,7 +23,7 @@
                             <a class="dropdown-item" href="/topics/{{ $topic->show_id}}/edit">Edit topic</a>
                         @endcan
                         @can('delete', $topic)
-                            <a class="dropdown-item" href="#">Delete topic</a>
+                            <a class="dropdown-item" href="/topics/{{ $topic->show_id}}/remove">Delete topic</a>
                         @endcan
                         </div>
                     </div>

@@ -3,7 +3,7 @@
 @section('content')
     <div class="container">
         <div class="row">
-            <div class="jumbotron">
+            <div class="jumbotron w-100">
                 <h1 class="display-6">{{$topic->title}}</h1>
                 <p class="lead">{{$topic->descr}}</p>
                 <div class="justify-content-between">
@@ -37,7 +37,7 @@
                         <a class="dropdown-item" href="/topics/{{ $topic->show_id}}/posts/{{ $post->show_id }}/edit">Edit post</a>
                     @endcan
                     @can('delete', $post)
-                        <a class="dropdown-item" href="#">Delete post</a>
+                        <a class="dropdown-item" href="/topics/{{ $topic->show_id}}/posts/{{ $post->show_id }}/remove">Delete post</a>
                     @endcan
                     </div>
                 </div>

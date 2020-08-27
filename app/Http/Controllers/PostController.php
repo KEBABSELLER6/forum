@@ -81,10 +81,9 @@ class PostController extends Controller
      */
     public function update(Request $request,$topic,$post)
     {
-        $this->authorize('update',[Post::getPost($post)]);
-        $cPost = Post::getPost($post);
+        $cPost=Post::getPost($post);
+        $this->authorize('update',[$cPost]);
         $cPost->update($this->validatePost($request));
-
         return redirect('/topics/' . $topic . '/posts');
     }
 
@@ -96,10 +95,19 @@ class PostController extends Controller
      */
     public function destroy($topic,$post)
     {
-        $this->authorize('delete',[Post::getPost($post)]);
-        Post::where('show_id', $post)->get()[0]->delete();
-
+        $cPost=Post::getPost($post);
+        $this->authorize('delete',[$cPost]);
+        $cPost->delete();
         return redirect('/topics/'. $topic . '/posts/');
+    }
+
+    public function remove($topic,$post){
+        $cPost=Post::getPost($post);
+        $this->authorize('delete',[$cPost]);
+        return view('posts.remove',[
+            'topic'=>$topic,
+            'post'=>$cPost
+        ]);
     }
 
     protected function validatePost($request){
