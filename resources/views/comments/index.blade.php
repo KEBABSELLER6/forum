@@ -7,7 +7,11 @@
                 <h1 class="display-6">{{$post->title}}</h1>
                 <p class="lead">{{$post->descr}}</p>
                 <div class="justify-content-between">
-                    <span class="badge badge-primary badge-pill">{{ $post->getOwnerName() }}</span>
+                   <div>
+                    <a class="badge badge-primary badge-pill text-light" href="/profile/{{$post->user_id}}">
+                        {{$post->getOwnerName()}}
+                    </a>
+                   </div>
                     <small>Created at : {{$post->getLastCommentDate()}}</small>
                 </div>
             </div>
@@ -18,7 +22,11 @@
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div class="col-11 justify-content-between">
                             <div>
-                                <span class="badge badge-primary badge-pill">{{ $comment->getOwnerName() }}</span>
+                                <div>
+                                    <a class="badge badge-primary badge-pill text-light" href="/profile/{{$comment->user_id}}">
+                                        {{$comment->getOwnerName()}}
+                                    </a>
+                                </div>
                                 <small>Created at : {{$comment->created_at}}</small>
                             </div>
                             <p class="mb-1">{{ $comment->body }}</p>

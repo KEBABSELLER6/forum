@@ -12,7 +12,9 @@
                             <small>Last post : {{$topic->getRecentPostDate()}}</small>
                         </div>
                         <div>
-                            <span class="badge badge-primary badge-pill">{{ $topic->getOwnerName() }}</span>
+                            <a class="badge badge-primary badge-pill text-light" href="/profile/{{$topic->user_id}}">
+                                {{$topic->getOwnerName()}}
+                            </a>
                         </div>
                     </div>
                     @canany(['update', 'delete'], $topic)

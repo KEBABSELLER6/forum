@@ -53,6 +53,24 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class)->withTimestamps();
     }
 
+    public function isModerator(){
+        foreach($this->roles()->get() as $role){
+            if($role->name==='moderator'){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function isAdmin(){
+        foreach($this->roles()->get() as $role){
+            if($role->name==='admin'){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function abilities(){
         $res=array();
         foreach($this->roles()->get() as $role){
@@ -61,5 +79,13 @@ class User extends Authenticatable
             }
         }
         return $res;
+    }
+
+    public function getLastPosts(){
+        return $this->posts()->latest('created_at')->take(3)->get();
+    }
+
+    public function getLastComments(){
+        return $this->comments()->latest('created_at')->take(3)->get();
     }
 }

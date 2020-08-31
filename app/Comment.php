@@ -27,4 +27,8 @@ class Comment extends Model
     public function getOwnerName(){
         return $this->user()->get()[0]->name;
     }
+
+    public function getTopic(){
+        return $this->post()->get()[0]->topic()->get()[0];
+    }
 }

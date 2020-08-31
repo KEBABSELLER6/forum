@@ -7,7 +7,11 @@
                 <h1 class="display-6">{{$topic->title}}</h1>
                 <p class="lead">{{$topic->descr}}</p>
                 <div class="justify-content-between">
-                    <span class="badge badge-primary badge-pill">{{ $topic->getOwnerName() }}</span>
+                    <div>
+                        <a class="badge badge-primary badge-pill text-light" href="/profile/{{$topic->user_id}}">
+                            {{$topic->getOwnerName()}}
+                        </a>
+                    </div>
                     <small>Created at : {{$topic->getRecentPostDate()}}</small>
                 </div>
             </div>
@@ -26,7 +30,11 @@
                     <small>Last post : {{$post->getLastCommentDate()}}</small>
                 </div>
                 <div>
-                    <span class="badge badge-primary badge-pill">{{ $topic->getOwnerName() }}</span>
+                    <div>
+                        <a class="badge badge-primary badge-pill text-light" href="/profile/{{$post->user_id}}">
+                            {{$post->getOwnerName()}}
+                        </a>
+                    </div>
                 </div>
                     </div>
                     @canany(['update', 'delete'], $post)

@@ -13,8 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Auth::routes();
+
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/topics');
 });
 
 Route::get('/topics', 'TopicController@index')->name('topics.index');
@@ -42,12 +44,11 @@ Route::delete('/topics/{topic}/posts/{post}/comments/{comment}', 'CommentControl
 Route::get('/topics/{topic}/posts/{post}/comments/{comment}/remove', 'CommentController@remove')->name('comments.remove');
 
 
-Route::get('/profile', function() {
-    return view('profile');
-});
+Route::get('/profile/{user}', 'UserController@show')->name('profile.show');
+Route::get('/profile/{user}/edit', 'UserController@edit')->name('profile.edit');
+Route::put('/profile/{user}', 'UserController@update')->name('profile.update');
+Route::post('profile/{user}/grant', 'UserController@grantmod')->name('profile.grantModerator');
+Route::post('profile/{user}/revoke', 'UserController@revokemod')->name('profile.revokeModerator');
 
 
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/home', 'HomeController@index')->name('home');
