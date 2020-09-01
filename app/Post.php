@@ -21,10 +21,6 @@ class Post extends Model
         if($coll->isEmpty() || $coll->count()<1){
             return response()->view('errors.400');
         }else {
-            $coll->map(function($topic,$key){
-                $topic['owner']=$topic->getOwnerName();
-                $topic['rCommentDate']=$topic->getLastCommentDate();
-            });
             return $coll[0];
         }
     }
@@ -33,10 +29,6 @@ class Post extends Model
     
     public function user(){
         return $this->belongsTo(User::class);
-    }
-
-    public function getUsername(){
-        return $this->user()->get()[0]->name;
     }
 
     public function getLastCommentDate(){

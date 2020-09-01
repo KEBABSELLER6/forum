@@ -9,7 +9,7 @@
             <div class="justify-content-between">
                 <div>
                     <a class="badge badge-primary badge-pill text-light" href="{{ route('profile.show' ,$topic->user_id) }}">
-                        {{$topic->owner}}
+                        {{$topic->getOwnerName()}}
                     </a>
                 </div>
                 <small>Created at : {{$topic->created_at}}</small>

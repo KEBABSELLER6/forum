@@ -4,7 +4,7 @@
         <div>
             <div>
                 <a class="badge badge-primary badge-pill text-light"
-                    href="{{route('profile.show', $comment->user_id)}}">{{$comment->owner}}</a>
+                    href="{{route('profile.show', $comment->user_id)}}">{{$comment->getOwnerName()}}</a>
             </div>
             <small>Created at : {{$comment->created_at}}</small>
         </div>
@@ -17,11 +17,11 @@
         <div class="dropdown-menu" aria-labelledby="dropdownMenu">
             @can('update', $comment)
             <a class="dropdown-item"
-                href="{{route('comments.edit',[$topic,$post,$comment->show_id])}}">Edit post</a>
+                href="{{route('comments.edit',[$topic,$post,$comment->show_id])}}">Edit comment</a>
             @endcan
             @can('delete', $comment)
             <a class="dropdown-item"
-                href="{{route('comments.remove',[$topic,$post,$comment->show_id])}}">Delete post</a>
+                href="{{route('comments.remove',[$topic,$post,$comment->show_id])}}">Delete comment</a>
             @endcan
         </div>
     </div>

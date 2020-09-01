@@ -8,7 +8,7 @@
             <p class="lead">{{$post->descr}}</p>
             <div class="justify-content-between">
                 <span class="badge badge-primary badge-pill">{{ $post->getOwnerName() }}</span>
-                <small>Created at : {{$post->getLastCommentDate()}}</small>
+                <small>Created at : {{$post->created_at}}</small>
             </div>
         </div>
     </div>

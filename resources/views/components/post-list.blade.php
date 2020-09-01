@@ -8,12 +8,12 @@
     </div>
     <div class="col-3 justify-content-between">
         <div>
-            <small>Last comment : {{$post->rCommentDate}}</small>
+            <small>Last comment : {{$post->getLastCommentDate()}}</small>
         </div>
         <div>
             <div>
                 <a class="badge badge-primary badge-pill text-light" href="{{route('profile.show',$topic)}}">
-                    {{$post->owner}}
+                    {{$post->getOwnerName()}}
                 </a>
             </div>
         </div>

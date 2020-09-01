@@ -17,10 +17,7 @@ class Topic extends Model
         if($coll->isEmpty() || $coll->count()<1){
             return response()->view('errors.400');
         }else{
-            $topic=$coll[0];
-            $topic['owner']=$topic->getOwnerName();
-            $topic['rPostDate']=$topic->getRecentPostDate();
-            return $topic;
+            return $coll[0];
         }
     }
 

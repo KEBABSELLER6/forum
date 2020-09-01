@@ -8,11 +8,11 @@
     </div>
     <div class="col-3 justify-content-between">
         <div>
-            <small>Last post : {{$topic->rPostDate}}</small>
+            <small>Last post : {{$topic->getRecentPostDate()}}</small>
         </div>
         <div>
             <a class="badge badge-primary badge-pill text-light" href="{{ route('profile.show' ,$topic->user_id) }}">
-                {{$topic->owner}}
+                {{$topic->getOwnerName()}}
             </a>
         </div>
     </div>

@@ -8,7 +8,7 @@
             <p class="lead">{{$post->descr}}</p>
             <div class="justify-content-between">
                 <div>
-                    <a class="badge badge-primary badge-pill text-light" href="{{route('profile.show', $post->user_id)}}">{{$post->owner}}</a>
+                    <a class="badge badge-primary badge-pill text-light" href="{{route('profile.show', $post->user_id)}}">{{$post->getOwnerName()}}</a>
                 </div>
                 <small>Created at : {{$post->created_at}}</small>
             </div>

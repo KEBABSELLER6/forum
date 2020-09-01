@@ -13,10 +13,7 @@ class Comment extends Model
         if($coll->isEmpty() || $coll->count()<1){
             return response()->view('errors.400');
         }else {
-            $comment = $coll[0];
-            $comment['owner'] = $comment->getOwnerName();
-            dd($comment->owner);
-            return $comment;
+            return $coll[0]; 
         }
     }
 
