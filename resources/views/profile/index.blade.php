@@ -42,7 +42,7 @@
         @else
         @can('grantModerator', Auth::user())
         <div class="col-6">
-            <a class="badge badge-primary badge-pill text-light"
+            <a class="badge badge-primary badge-pill text-success"
                 href="{{ route('profile.grantModerator',[$user->id]) }}" onclick="event.preventDefault();
                                                      document.getElementById('grant-form').submit();">
                 {{ __('Grant moderator') }}

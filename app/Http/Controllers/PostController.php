@@ -17,9 +17,6 @@ class PostController extends Controller
     {
         $cTopic=Topic::getTopic($topic);
         $cPosts=$cTopic->posts()->get();
-        $cPosts->map(function($post,$key){
-            $post['owner']=$post->getOwnerName();
-        });
         return view('posts.index',[
             'topic' => $cTopic,
             'posts' => $cPosts

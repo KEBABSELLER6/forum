@@ -18,9 +18,6 @@ class CommentController extends Controller
     {
         $cPost= Post::getPost($post);
         $cComments=$cPost->comments()->get();
-        $cComments->map(function($comment,$key){
-            $comment['owner']=$comment->getOwnerName();
-        });
         return view('comments.index',[
             'topic'=>$topic,
             'post' => $cPost,
