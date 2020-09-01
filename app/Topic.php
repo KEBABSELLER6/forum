@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+
 
 class Topic extends Model
 {
@@ -11,13 +13,25 @@ class Topic extends Model
     }
 
     public static function getTopic($showID){
-        return Topic::where('show_id', $showID)->get()[0];
+        $coll=Topic::where('show_id', $showID)->get();
+        if($coll->isEmpty() || $coll->count()<1){
+            return response()->view('errors.400');
+        }else{
+            $topic=$coll[0];
+            $topic['owner']=$topic->getOwnerName();
+            $topic['rPostDate']=$topic->getRecentPostDate();
+            return $topic;
+        }
     }
 
     protected $fillable = ['title', 'user_id', 'descr','show_id'];
 
     public static function getTopics($type){
         $topics= Topic::where('type',$type)->get();
+        $topics->map(function($topic,$key){
+            $topic['owner']=$topic->getOwnerName();
+            $topic['rPostDate']=$topic->getRecentPostDate();
+        });
         return $topics;
     }
 
@@ -37,4 +51,5 @@ class Topic extends Model
     public function getOwnerName(){
         return $this->user()->get()[0]->name;
     }
+
 }

@@ -29,7 +29,13 @@ class TopicController extends Controller
     public function create()
     {
         $this->authorize('create',Topic::class);
-        return view('topics.create');
+        return view('topics.form',[
+            'title'=>'New topic',
+            'route'=>'topics.store',
+            'routeArgs'=>[],
+            'method'=>'post',
+            'topic'=>null
+        ]);
     }
 
     /**
@@ -49,7 +55,7 @@ class TopicController extends Controller
             'show_id' => uniqid()
         ]);
 
-        return redirect('/topics');
+        return redirect()->route('topics.index');
     }
 
     /**
@@ -62,8 +68,12 @@ class TopicController extends Controller
     {
         $cTopic=Topic::getTopic($topic);
         $this->authorize('update',[$cTopic]);
-        return view('topics.edit',[
-            'topic' => $cTopic
+        return view('topics.form',[
+            'title'=>'Edit topic',
+            'route'=>'topics.update',
+            'routeArgs'=>['topic'=>$cTopic->show_id],
+            'method'=>'put',
+            'topic'=>$cTopic
         ]);
     }
 
@@ -79,7 +89,7 @@ class TopicController extends Controller
         $cTopic=Topic::getTopic($topic);
         $this->authorize('update',[$cTopic]);
         $cTopic->update($this->validateTopic($request));
-        return redirect('/topics');
+        return redirect()->route('topics.index');
     }
 
     /**
@@ -93,7 +103,7 @@ class TopicController extends Controller
         $cTopic=Topic::getTopic($topic);
         $this->authorize('delete',[$cTopic]);
         $cTopic->delete();
-        return redirect('/topics');
+        return redirect()->route('topics.index');
     }
 
     public function remove($topic){

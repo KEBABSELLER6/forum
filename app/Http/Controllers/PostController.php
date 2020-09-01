@@ -16,9 +16,13 @@ class PostController extends Controller
     public function index($topic)
     {
         $cTopic=Topic::getTopic($topic);
+        $cPosts=$cTopic->posts()->get();
+        $cPosts->map(function($post,$key){
+            $post['owner']=$post->getOwnerName();
+        });
         return view('posts.index',[
             'topic' => $cTopic,
-            'posts' => Topic::find($cTopic->id)->posts()->get()
+            'posts' => $cPosts
         ]);
     }
 
@@ -30,8 +34,12 @@ class PostController extends Controller
     public function create($topic)
     {
         $this->authorize('create',Post::class);
-        return view('posts.create',[
-            'topic' => Topic::getTopic($topic)
+        return view('posts.form',[
+            'title'=>'New post',
+            'route'=>'posts.store',
+            'routeArgs'=>[$topic],
+            'method'=>'post',
+            'post'=>null
         ]);
     }
 
@@ -54,7 +62,7 @@ class PostController extends Controller
             'topic_id'=>$cTopic->id
         ]);
 
-        return redirect('/topics/' .$topic . '/posts');
+        return redirect()->route('posts.index',$topic);
     }
 
     /**
@@ -65,10 +73,14 @@ class PostController extends Controller
      */
     public function edit($topic,$post)
     {
-        $this->authorize('update',[Post::getPost($post)]);
-        return view('posts.edit',[
-            'topic' => Topic::getTopic($topic),
-            'post' => Post::getPost($post)
+        $cPost=Post::getPost($post);
+        $this->authorize('update',[$cPost]);
+        return view('posts.form',[
+            'title'=>'Edit post',
+            'route'=>'posts.update',
+            'routeArgs'=>[$topic,$post],
+            'method'=>'put',
+            'post'=>$cPost
         ]);
     }
 
@@ -84,7 +96,7 @@ class PostController extends Controller
         $cPost=Post::getPost($post);
         $this->authorize('update',[$cPost]);
         $cPost->update($this->validatePost($request));
-        return redirect('/topics/' . $topic . '/posts');
+        return redirect()->route('posts.index',$topic);
     }
 
     /**
@@ -98,7 +110,7 @@ class PostController extends Controller
         $cPost=Post::getPost($post);
         $this->authorize('delete',[$cPost]);
         $cPost->delete();
-        return redirect('/topics/'. $topic . '/posts/');
+        return redirect()->route('posts.index',$topic);
     }
 
     public function remove($topic,$post){

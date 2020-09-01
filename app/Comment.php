@@ -3,11 +3,21 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+
 
 class Comment extends Model
 {
     public static function getComment($showID){
-        return Comment::where('show_id',$showID)->get()[0];
+        $coll = Comment::where('show_id',$showID)->get();
+        if($coll->isEmpty() || $coll->count()<1){
+            return response()->view('errors.400');
+        }else {
+            $comment = $coll[0];
+            $comment['owner'] = $comment->getOwnerName();
+            dd($comment->owner);
+            return $comment;
+        }
     }
 
     protected $fillable = ['body', 'user_id','show_id','post_id'];

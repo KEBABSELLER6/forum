@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
+
 
 class Post extends Model
 {
@@ -15,7 +17,16 @@ class Post extends Model
     }
 
     public static function getPost($showID){
-        return Post::where('show_id',$showID)->get()[0];
+        $coll=Post::where('show_id',$showID)->get();
+        if($coll->isEmpty() || $coll->count()<1){
+            return response()->view('errors.400');
+        }else {
+            $coll->map(function($topic,$key){
+                $topic['owner']=$topic->getOwnerName();
+                $topic['rCommentDate']=$topic->getLastCommentDate();
+            });
+            return $coll[0];
+        }
     }
 
     protected $fillable = ['title', 'user_id', 'descr','show_id','topic_id'];

@@ -17,10 +17,14 @@ class CommentController extends Controller
     public function index($topic,$post)
     {
         $cPost= Post::getPost($post);
+        $cComments=$cPost->comments()->get();
+        $cComments->map(function($comment,$key){
+            $comment['owner']=$comment->getOwnerName();
+        });
         return view('comments.index',[
             'topic'=>$topic,
             'post' => $cPost,
-            'comments' => $cPost->comments()->get()
+            'comments' => $cComments
         ]);
     }
 
@@ -32,9 +36,13 @@ class CommentController extends Controller
     public function create($topic,$post)
     {
         $this->authorize('create',Comment::class);
-        return view('comments.create',[
-            'topic'=>$topic,
-            'post'=>Post::getPost($post)
+        $cPost=Post::getPost($post);
+        return view('comments.form',[
+            'title'=>'New comment',
+            'route'=>'comments.store',
+            'routeArgs'=>['topic'=>$topic,'post'=>$post],
+            'method'=>'post',
+            'post'=>$cPost
         ]);
     }
 
@@ -56,7 +64,7 @@ class CommentController extends Controller
             'post_id'=>$cPost->id
         ]);
 
-        return redirect('/topics/' .$topic . '/posts/' . $post . '/comments');
+        return redirect()->route('comments.index',[$topic,$post]);
     }
     
     /**
@@ -67,11 +75,16 @@ class CommentController extends Controller
      */
     public function edit($topic,$post,$comment)
     {
-        $this->authorize('update',[Comment::getComment($comment)]);
-        return view('comments.edit',[
-            'topic'=>$topic,
-            'post'=>Post::getPost($post),
-            'comment'=>Comment::getComment($comment)
+        $cComment=Comment::getComment($comment);
+        $this->authorize('update',[$cComment]);
+        $cPost=Post::getPost($post);
+        return view('comments.form',[
+            'title'=>'Edit comment',
+            'route'=>'comments.update',
+            'routeArgs'=>['topic'=>$topic,'post'=>$post,'comment'=>$cComment->show_id],
+            'method'=>'put',
+            'post'=>$cPost,
+            'comment'=>$cComment
         ]);
     }
 
@@ -87,7 +100,7 @@ class CommentController extends Controller
         $cComment=Comment::getComment($comment);
         $this->authorize('update',[$cComment]);
         $cComment->update($this->validateComment($request));
-        return redirect('/topics/' .$topic . '/posts/' . $post . '/comments');
+        return redirect()->route('comments.index',[$topic,$post]);
     }
 
     /**
@@ -101,7 +114,7 @@ class CommentController extends Controller
         $cComment=Comment::getComment($comment);
         $this->authorize('delete',[$cComment]);
         $cComment->delete();
-        return redirect('/topics/' .$topic . '/posts/' . $post . '/comments');
+        return redirect()->route('comments.index',[$topic,$post]);
     }
 
     public function remove($topic,$post,$comment){
